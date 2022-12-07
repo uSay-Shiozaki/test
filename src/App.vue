@@ -1,25 +1,44 @@
 <script>
+
 export default {
-  data() {
-    return {}
+    data() {
+    return {
+      todos: [
+      ],
+    }
   },
-  methods: {},
+  methods: {
+    addTodo() {
+        if(this.newTodoText === ''){
+            alert('INPUT YOUR TODO')
+            return
+        }
+        this.todos.push({
+            isDone: false,
+            text: this.newTodoText,
+        })
+        this.newTodoText = ''
+    },
+    clearDoneTodos() {
+        this.todos = this.todos.filter((todo) => !todo.isDone)
+    },
+  },
 }
 </script>
 
 <template>
   <h1>My ToDo App</h1>
-  <input type="text" />
-  <button>追加</button>
-  <button>完了済みを削除する</button>
-  <ul>
-    <li>
-      <input type="checkbox" checked /><span class="todo-done"
-        >Vueをマスターする</span
+  <input type="text" v-model="newTodoText"/>
+  <button @click="addTodo">追加</button>
+  <button @click="clearDoneTodos">完了済みを削除する</button>
+  <p v-if="(todos.length === 0)">ToDo is not set yet!</p>
+  <ul v-else>
+    <li v-for="(todo, index) in todos" v-bind:key="index">
+      <input type="checkbox" v-model="todo.isDone" /><span :class="{ 'todo-done': todo.isDone }"
+        >{{ todo.text }}</span
       >
     </li>
-    <li><input type="checkbox" /><span>牛乳を買う</span></li>
-    <li><input type="checkbox" /><span>家賃を払う</span></li>
+
   </ul>
 </template>
 
